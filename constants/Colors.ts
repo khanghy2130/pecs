@@ -1,7 +1,7 @@
 
 export default {
-    text: '#96ddff',
-    background: "#001d2b",
+    text: '#ffffff',
+    background: "#000000",
     activeTint: '#54c7ff',
-    inactiveTint: '#164c66'
+    inactiveTint: '#0b3245'
 };

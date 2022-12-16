@@ -39,7 +39,15 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerTitle(props) {
+        return null;
+      },
+      headerTintColor: Colors.activeTint,
+      headerStyle: {
+        backgroundColor: Colors.inactiveTint
+      }
+    }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Page not found!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
@@ -53,6 +61,8 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
+
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -61,10 +71,19 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="TabOne"
       screenOptions={{
-        tabBarActiveTintColor: Colors.activeTint,
-        tabBarInactiveTintColor: Colors.inactiveTint,
+        tabBarActiveTintColor: Colors.inactiveTint,
+        tabBarActiveBackgroundColor: Colors.activeTint,
+        tabBarInactiveTintColor: Colors.activeTint,
+        tabBarInactiveBackgroundColor: Colors.inactiveTint,
         tabBarStyle: { height: 60 },
-        tabBarShowLabel: false
+        tabBarShowLabel: false,
+        
+        headerTitle(props) {
+          return null;
+        },
+        headerStyle: {
+          backgroundColor: Colors.inactiveTint
+        }
       }}>
       <BottomTab.Screen
         name="TabOne"
@@ -73,14 +92,16 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="play" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => {
+                navigation.push('Modal', {ID: 0});
+              }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <FontAwesome
                 name="info-circle"
                 size={25}
-                color={Colors.text}
+                color={Colors.activeTint}
                 style={{ marginRight: 15 }}
               />
             </Pressable>
@@ -91,7 +112,7 @@ function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="smile-o" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
         }}
       />
       <BottomTab.Screen
