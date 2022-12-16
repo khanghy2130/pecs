@@ -13,11 +13,11 @@ import { Pressable } from 'react-native';
 import Colors from '../constants/Colors';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import TabThreeScreen from '../screens/TabThreeScreen';
-import TabFourScreen from '../screens/TabFourScreen';
-import TabFiveScreen from '../screens/TabFiveScreen';
+import GamesListScreen from '../screens/GamesListScreen';
+import CollectScreen from '../screens/CollectScreen';
+import CreateScreen from '../screens/CreateScreen';
+import FindScreen from '../screens/FindScreen';
+import HomeScreen from '../screens/HomeScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -69,7 +69,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="GamesList"
       screenOptions={{
         tabBarActiveTintColor: Colors.inactiveTint,
         tabBarActiveBackgroundColor: Colors.activeTint,
@@ -86,9 +86,9 @@ function BottomTabNavigator() {
         }
       }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
+        name="GamesList"
+        component={GamesListScreen}
+        options={({ navigation }: RootTabScreenProps<'GamesList'>) => ({
           tabBarIcon: ({ color }) => <TabBarIcon name="play" color={color} />,
           headerRight: () => (
             <Pressable
@@ -109,29 +109,29 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Collect"
+        component={CollectScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabThree"
-        component={TabThreeScreen}
+        name="Create"
+        component={CreateScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabFour"
-        component={TabFourScreen}
+        name="Find"
+        component={FindScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabFive"
-        component={TabFiveScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
