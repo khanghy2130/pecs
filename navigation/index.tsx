@@ -10,9 +10,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { Pressable } from 'react-native';
 
+import { useAuthentication } from '../hooks/useAuthentication';
+
 import Colors from '../constants/Colors';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import LoggedOutScreen from '../screens/LoggedOutScreen';
+
 import GamesListScreen from '../screens/GamesListScreen';
 import CollectScreen from '../screens/CollectScreen';
 import CreateScreen from '../screens/CreateScreen';
@@ -22,13 +26,22 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation() {
-  return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={DarkTheme}>
-      <RootNavigator />
-    </NavigationContainer>
-  );
+  const { user } = useAuthentication();
+
+  // user is logged in
+  if (user){
+    return (
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={DarkTheme}>
+        <RootNavigator />
+      </NavigationContainer>
+    );
+  }
+
+  // user is logged out
+  return <LoggedOutScreen />
+  
 }
 
 /**
