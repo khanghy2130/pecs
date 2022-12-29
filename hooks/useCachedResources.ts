@@ -16,7 +16,8 @@ export default function useCachedResources() {
         //////////// set loaded font to this specific family
         await Font.loadAsync({
           ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          'lgc-normal': require('../assets/fonts/Louis George Cafe.ttf'),
+          'lgc-light': require('../assets/fonts/Louis George Cafe Light.ttf')
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

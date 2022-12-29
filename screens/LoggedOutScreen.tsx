@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, Pressable, Button, TextInput, Alert,
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Pressable, PressableProps, Button, TextInput,
   KeyboardAvoidingView } from 'react-native';
+
+import { StyledText, StyledTextLight } from '../components/StyledText';
 import Colors from '../constants/Colors';
 import alert from '../constants/Alert';
+import { FontAwesome } from '@expo/vector-icons';
+
+import Constants from 'expo-constants';
 
 ////// https://blog.logrocket.com/integrating-firebase-authentication-expo-mobile-app/
 
 type TabName = "login" | "signup" | "reset";
+
+
+const renderBottomButton = (
+  labelText: string, action: PressableProps["onPress"]
+): JSX.Element => {
+  return <Pressable style={styles.pressable} onPress={action}>
+    <StyledText style={styles.pressableText}>{labelText}</StyledText>
+  </Pressable>;
+}
 
 export default function CollectScreen() {
   const [tab, setTab] = useState<TabName>("login");
   const [email, onChangeEmail] = useState<string>("");
   const [password, onChangePassword] = useState<string>("");
   const [password2, onChangePassword2] = useState<string>("");
+
+  // reset inputs on tab switch
+  useEffect(() => {
+    onChangeEmail("");
+    onChangePassword("");
+    onChangePassword2("");
+  }, [tab]);
 
   const onEnterButton = () => {
     if (tab === "login"){
@@ -24,88 +45,103 @@ export default function CollectScreen() {
     }
   };
 
-  const renderTabs: { [key in TabName]: JSX.Element } = {
-    "login": <View style={styles.switchableTab}>
-      <Text style={styles.title}>Welcome back</Text>
-
-      <KeyboardAvoidingView>
-        <Text style={styles.inputLabel}>Email</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-        />
-        <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-        />
-      </KeyboardAvoidingView>
-      <Button title="Log in" onPress={onEnterButton} />
-
-      <Pressable style={styles.pressable} onPress={() => setTab("reset")}>
-        <Text style={styles.pressableText}>Forgot Password</Text>
-      </Pressable>
-      <Pressable style={styles.pressable} onPress={() => setTab("signup")}>
-        <Text style={styles.pressableText}>Create Account</Text>
-      </Pressable>
-    </View>,
-
-    "signup": <View style={styles.switchableTab}>
-      <Text style={styles.title}>Create account</Text>
-
-      <KeyboardAvoidingView>
-        <Text style={styles.inputLabel}>Email</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-        />
-        <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-        />
-        <Text style={styles.inputLabel}>Confirm password</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword2}
-          value={password2}
-        />
-      </KeyboardAvoidingView>
-      <Button title="Sign up" onPress={onEnterButton} />
-
-      <Pressable style={styles.pressable} onPress={() => setTab("login")}>
-        <Text style={styles.pressableText}>Log in</Text>
-      </Pressable>
-    </View>,
-
-    "reset": <View style={styles.switchableTab}>
-      <Text style={styles.title}>Reset password</Text>
-
-      <KeyboardAvoidingView>
-        <Text style={styles.inputLabel}>Email</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-        />
-      </KeyboardAvoidingView>
-      <Button title="Send link" onPress={onEnterButton} />
-
-      <Pressable style={styles.pressable} onPress={() => setTab("login")}>
-        <Text style={styles.pressableText}>Log in</Text>
-      </Pressable>
-    </View>
-  };
 
   return (
     <View style={{marginTop: 30}}>
-      {renderTabs[tab]}
+      {
+        {
+          "login": <View style={styles.switchableTab}>
+            <StyledTextLight style={styles.title}>Welcome back</StyledTextLight>
       
-      {/* ///////// providers */}
+            <KeyboardAvoidingView>
+              <StyledText style={styles.inputLabel}>Email</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeEmail}
+                value={email}
+                textContentType="emailAddress"
+              />
+              <StyledText style={styles.inputLabel}>Password</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangePassword}
+                value={password}
+                textContentType="password"
+                secureTextEntry={true}
+                autoCapitalize={"none"}
+              />
+            </KeyboardAvoidingView>
+            <Button title="Log in" onPress={onEnterButton} />
+      
+            {renderBottomButton("Forgot Password", () => setTab("reset"))}
+            {renderBottomButton("Create Account", () => setTab("signup"))}
+            {renderBottomButton("Use Guest Account", () => {
+              onChangeEmail(Constants.manifest?.extra?.guestEmail);
+              onChangePassword(Constants.manifest?.extra?.guestPassword);
+            })}
+
+          </View>,
+      
+          "signup": <View style={styles.switchableTab}>
+            <StyledTextLight style={styles.title}>Create account</StyledTextLight>
+      
+            <KeyboardAvoidingView>
+              <StyledText style={styles.inputLabel}>Email</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeEmail}
+                value={email}
+                textContentType="emailAddress"
+              />
+              <StyledText style={styles.inputLabel}>Password</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangePassword}
+                value={password}
+                textContentType="password"
+                secureTextEntry={true}
+                autoCapitalize={"none"}
+              />
+              <StyledText style={styles.inputLabel}>Confirm password</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangePassword2}
+                value={password2}
+                textContentType="password"
+                secureTextEntry={true}
+                autoCapitalize={"none"}
+              />
+            </KeyboardAvoidingView>
+            <Button title="Sign up" onPress={onEnterButton} />
+            {renderBottomButton("Log In", () => setTab("login"))}
+          </View>,
+      
+          "reset": <View style={styles.switchableTab}>
+            <StyledTextLight style={styles.title}>Reset password</StyledTextLight>
+      
+            <KeyboardAvoidingView>
+              <StyledText style={styles.inputLabel}>Email</StyledText>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeEmail}
+                value={email}
+                textContentType="emailAddress"
+              />
+            </KeyboardAvoidingView>
+            <Button title="Send link" onPress={onEnterButton} />
+            {renderBottomButton("Log In", () => setTab("login"))}
+          </View>
+        }[tab]
+      }
+
+      
+      
+      <Button 
+        title='Continue with Google'
+        onPress={() => {
+          
+        }}
+      />
 
     </View>
   );
@@ -115,14 +151,15 @@ export default function CollectScreen() {
 
 const styles = StyleSheet.create({
   title: {
-    color: Colors.text
+    fontSize: 30
   },
 
   inputLabel: {
-    color: Colors.text
+    fontSize: 20
   },
   input: {
-    backgroundColor: "#fff"
+    backgroundColor: Colors.text,
+    color: Colors.background
   },
 
   pressable: {
@@ -130,6 +167,7 @@ const styles = StyleSheet.create({
   },
   pressableText: {
     fontSize: 20,
+    fontFamily: "lgc-normal",
     color: Colors.text
   },
 
